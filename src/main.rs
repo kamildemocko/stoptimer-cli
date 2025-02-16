@@ -6,13 +6,22 @@ use std::{
 
 const TICK: Duration = Duration::from_millis(8);
 
+// 0:00:000 (hod:sec:ms)
+fn format_stoptimer(dur: &Duration) -> String {
+    let millis = dur.as_millis();
+    let s = millis as f32 / 1000_f32;
+
+    format!("{} : {:0>2} : {:0>3.0}", 0, s as u8, s.fract() * 1000_f32)
+}
+
 fn main() {
     let now = Instant::now();
 
-    println!("start");
+    println!(""); // just an empty line
+
     loop {
         let since = now.elapsed();
-        println!("{:?}", since);
+        println!("{:?}", format_stoptimer(&since));
         _ = io::stdout().flush();
 
         thread::sleep(TICK);
