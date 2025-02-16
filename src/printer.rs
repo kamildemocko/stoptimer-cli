@@ -1,26 +1,31 @@
 use std::{
     io::{self, Write},
-    thread,
-    time::{Duration, Instant},
+    time::Duration,
 };
 
 use crate::themes::model::Theme;
 
-const TICK: Duration = Duration::from_millis(8);
+pub struct Printer<T: Theme> {
+    first_run: bool,
+    theme: T,
+}
 
-pub fn loop_print(theme: impl Theme) {
-    let now = Instant::now();
+impl<T: Theme> Printer<T> {
+    pub fn new(theme: T) -> Self {
+        Self {
+            first_run: true,
+            theme,
+        }
+    }
 
-    println!(""); // just an empty line
+    pub fn print(&mut self, duration: &Duration) {
+        if self.first_run {
+            println!();
+            self.first_run = false;
+        }
 
-    loop {
-        let since = now.elapsed();
-
-        println!("{}", theme.format(&since));
+        println!("{}", self.theme.format(&duration));
         _ = io::stdout().flush();
-
-        thread::sleep(TICK);
-
-        print!("\x1b[1A\x1b[2K"); // move up 1 line and clear it and move down
+        print!("\x1b[1A\x1b[2K");
     }
 }
