@@ -7,7 +7,8 @@ use crate::{themes::model::Theme, ui::{terminal::TerminalUI, trait_def::UI}};
 pub struct App<T: Theme> {
     pub is_running: bool,
     start_time: Instant,
-    accumulated_time: Duration,
+    paused_time: Duration,
+    pause_time: Instant,
     ui: TerminalUI<T>
 }
 
@@ -16,7 +17,8 @@ impl<T: Theme> App<T> {
         Self {
             start_time: Instant::now(),
             is_running: true,
-            accumulated_time: Duration::from_millis(0),
+            paused_time: Duration::from_millis(0),
+            pause_time: Instant::now(),
             ui: TerminalUI::new(theme),
         }
     }
@@ -26,18 +28,21 @@ impl<T: Theme> App<T> {
     }
 
     pub fn print_one(&mut self) -> io::Result<()> {
-        self.ui.print(&self.start_time.elapsed())
-    }
-
-    pub fn elapsed(&self) -> time::Duration {
-        self.start_time.elapsed()
+        let wo_pause = self.start_time.elapsed() - self.paused_time;
+        self.ui.print(&wo_pause)
     }
 
     pub fn toggle_pause(&mut self) -> io::Result<()> {
-        self.is_running = !self.is_running;
-        self.accumulated_time += self.elapsed();
+        if self.is_running {
+            self.ui.pause_screen()?;
+            self.pause_time = Instant::now();
+        } else {
+            self.paused_time += self.pause_time.elapsed();
 
-        self.ui.pause_screen()
+        }
+
+        self.is_running = !self.is_running;
+        io::Result::Ok(())
     }
 
     pub fn quit(&mut self) -> io::Result<()> {
