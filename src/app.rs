@@ -1,5 +1,5 @@
 use std::{
-    io, process, time::{self, Duration, Instant}
+    io, process, time::{Duration, Instant}
 };
 
 use crate::{themes::model::Theme, ui::{terminal::TerminalUI, trait_def::UI}};

@@ -1,5 +1,4 @@
 mod app;
-mod printer;
 mod themes;
 mod ui;
 
