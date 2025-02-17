@@ -1,12 +1,12 @@
 mod app;
 mod printer;
 mod themes;
+mod ui;
 
 use std::io;
 use std::{thread, time::Duration};
 
 use crossterm::event::{self, Event};
-use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 
 use crate::app::App;
 use crate::themes::{default::DefaultTheme, model::Theme};
@@ -17,17 +17,17 @@ fn main() -> io::Result<()> {
     let theme = DefaultTheme::new();
     let mut app = App::new(theme);
 
-    app.printer.reset_screen()?;
+    app.init()?;
 
     loop {
         if event::poll(Duration::from_millis(0))? {
             if let Event::Key(key_event) = event::read()? {
                 match key_event.code {
                     event::KeyCode::Char('q') => {
-                        app.quit();
+                        app.quit()?;
                     }
                     event::KeyCode::Char(' ') => {
-                        app.toggle_pause();
+                        app.toggle_pause()?;
                     }
                     _ => {}
                 }
@@ -35,7 +35,7 @@ fn main() -> io::Result<()> {
         }
 
         if app.is_running {
-            app.printer.print(&app.elapsed())?;
+            app.print_one()?;
         }
 
         thread::sleep(TICK);
