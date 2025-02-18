@@ -1,3 +1,4 @@
+mod args;
 mod app;
 mod themes;
 mod ui;
@@ -6,17 +7,16 @@ use std::io;
 use std::{thread, time::Duration};
 
 use crossterm::event::{self, Event};
-use themes::factory::ThemeType;
 
+use args::parse_requested_theme;
 use crate::app::App;
 use crate::themes::factory::ThemeFactory;
 
 const TICK: Duration = Duration::from_millis(8);
 
 fn main() -> io::Result<()> {
-    // todo: clap
-    let user_picked_theme = ThemeType::from_str("default");
-    let theme = ThemeFactory::create(user_picked_theme);
+    let requested_theme = parse_requested_theme();
+    let theme = ThemeFactory::create(requested_theme);
 
     let mut app = App::new(theme);
 

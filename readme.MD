@@ -27,6 +27,12 @@ Run the program:
 cargo run
 ```
 
+Choose a theme
+
+```bash
+cargo run -t detail
+```
+
 ## Look
 
 ```
