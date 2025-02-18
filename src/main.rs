@@ -9,8 +9,8 @@ use std::{thread, time::Duration};
 use crossterm::event::{self, Event};
 
 use args::parse_requested_theme;
-use crate::app::App;
-use crate::themes::factory::ThemeFactory;
+use app::App;
+use themes::factory::ThemeFactory;
 
 const TICK: Duration = Duration::from_millis(8);
 
