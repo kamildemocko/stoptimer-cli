@@ -27,13 +27,21 @@ Run the program:
 cargo run
 ```
 
-Choose a theme
+## Themes
+
+List all available themes
 
 ```bash
-cargo run -t detail
+cargo run -l
 ```
 
-## Look
+Run with a theme
+
+```bash
+cargo run -t THEME_NAME
+```
+
+## Example
 
 ```
 > 2:    0 : 00 : 08 : 107

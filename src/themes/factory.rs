@@ -35,6 +35,14 @@ impl ThemeType {
             _ => ThemeType::Default,
         }
     }
+
+    pub fn available_themes() -> Vec<String> {
+        vec![
+            "default".to_string(),
+            "detail".to_string(),
+            "compact".to_string(),
+            ]
+    }
 }
 
 pub struct ThemeFactory;
