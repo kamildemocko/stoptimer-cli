@@ -36,7 +36,7 @@ impl<T: Theme> App<T> {
 
     pub fn split(&mut self) -> io::Result<()> {
         self.splits.push(self.start_time.elapsed() - self.paused_duration);
-        self.ui.add_split()?;
+        self.ui.add_split();
         self.ui.init_screen()
     }
 
