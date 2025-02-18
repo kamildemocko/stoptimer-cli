@@ -51,6 +51,14 @@ cargo run -t THEME_NAME
 
 >> running [ <h> to help ]
 ```
+- default theme
+
+```
+░░░░░░-░░░░░░-░▓░▓▓░-░▓▓▓
+
+>> running [ <h> to help ]
+```
+- binary theme
 
 ### Controls
 
