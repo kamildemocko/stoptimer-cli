@@ -1,5 +1,5 @@
 use std::{
-    io, process, time::{Duration, Instant}
+    io, process, thread, time::{Duration, Instant}
 };
 
 use crate::{themes::model::Theme, ui::{terminal::TerminalUI, trait_def::UI}};
@@ -32,6 +32,13 @@ impl<T: Theme> App<T> {
     pub fn print_one(&mut self) -> io::Result<()> {
         let wo_pause = self.start_time.elapsed() - self.paused_duration;
         self.ui.print(&wo_pause, &self.splits)
+    }
+
+    pub fn help(&mut self) -> io::Result<()> {
+        self.ui.print_help()?;
+        thread::sleep(Duration::from_secs(3));
+
+        io::Result::Ok(())
     }
 
     pub fn split(&mut self) -> io::Result<()> {

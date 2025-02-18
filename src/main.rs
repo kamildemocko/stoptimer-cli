@@ -25,6 +25,9 @@ fn main() -> io::Result<()> {
                     event::KeyCode::Char('q') => {
                         app.quit()?;
                     }
+                    event::KeyCode::Char('h') => {
+                        app.help()?;
+                    }
                     event::KeyCode::Char(' ') => {
                         app.toggle_pause()?;
                     }

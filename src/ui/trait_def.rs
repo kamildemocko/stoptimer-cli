@@ -7,4 +7,5 @@ pub trait UI {
     fn pause_screen(&mut self) -> io::Result<()>;
     fn add_split(&mut self);
     fn print(&mut self, duration: &Duration, laps: &Vec<Duration>) -> io::Result<()>;
+    fn print_help(&mut self) -> io::Result<()>;
 }

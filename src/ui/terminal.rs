@@ -1,6 +1,6 @@
 use std::{io::{self, Write}, time::Duration};
 
-use crossterm::{cursor::{self, MoveTo}, execute, style::Print, terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType, size}};
+use crossterm::{cursor::{self}, execute, style::Print, terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType, size}};
 
 use crate::themes::model::Theme;
 
@@ -41,10 +41,10 @@ impl<T: Theme> UI for TerminalUI<T> {
             execute!(
                 self.stdout,
                 cursor::Show,
-                MoveTo(0, self.split_counter + 3),
+                cursor::MoveTo(0, self.split_counter + 3),
                 Clear(ClearType::CurrentLine),
                 Print(">> quit"),
-                MoveTo(0, self.split_counter + 4),
+                cursor::MoveTo(0, self.split_counter + 4),
             )?;
 
             disable_raw_mode()?;
@@ -64,7 +64,7 @@ impl<T: Theme> UI for TerminalUI<T> {
         fn pause_screen(&mut self) -> io::Result<()> {
             execute!(
                 self.stdout,
-                MoveTo(0, self.split_counter + 3),
+                cursor::MoveTo(0, self.split_counter + 3),
                 Clear(ClearType::CurrentLine),
                 Print(">> paused")
             )?;
@@ -98,11 +98,23 @@ impl<T: Theme> UI for TerminalUI<T> {
                 cursor::MoveTo(0, self.split_counter + 1),
                 Clear(ClearType::CurrentLine),
                 Print(self.theme.format(&duration)),
-                MoveTo(0, self.split_counter + 3),
+                cursor::MoveTo(0, self.split_counter + 3),
                 Clear(ClearType::CurrentLine),
-                Print(">> running")
+                Print(">> running [ <h> to help ]")
             )?;
 
             self.stdout.flush()
         }
+
+        fn print_help(&mut self) -> io::Result<()> {
+            execute!(
+                self.stdout,
+                cursor::MoveTo(0, self.split_counter + 3),
+                Clear(ClearType::CurrentLine),
+                Print(">> help: [ <space> to pause | <s> to split | <q> to quit ]")
+            )?;
+
+            self.stdout.flush()
+        }
+
 }
