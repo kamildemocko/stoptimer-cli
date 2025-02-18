@@ -28,6 +28,9 @@ fn main() -> io::Result<()> {
                     event::KeyCode::Char(' ') => {
                         app.toggle_pause()?;
                     }
+                    event::KeyCode::Char('s') => {
+                        app.lap()?;
+                    }
                     _ => {}
                 }
             }
