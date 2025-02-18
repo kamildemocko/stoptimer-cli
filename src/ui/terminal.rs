@@ -9,7 +9,7 @@ use super::trait_def::UI;
 pub struct TerminalUI<T: Theme> {
     stdout: io::Stdout,
     theme: T,
-    lap_rows: u16,
+    split_counter: u16,
 }
 
 impl<T: Theme> TerminalUI<T> {
@@ -17,7 +17,7 @@ impl<T: Theme> TerminalUI<T> {
             Self {
                 stdout: io::stdout(),
                 theme,
-                lap_rows: 0,
+                split_counter: 0,
             }
         }
 }
@@ -38,10 +38,10 @@ impl<T: Theme> UI for TerminalUI<T> {
             execute!(
                 self.stdout,
                 cursor::Show,
-                MoveTo(0, self.lap_rows + 3),
+                MoveTo(0, self.split_counter + 3),
                 Clear(ClearType::CurrentLine),
                 Print(">> quit"),
-                MoveTo(0, self.lap_rows + 4),
+                MoveTo(0, self.split_counter + 4),
             )?;
 
             disable_raw_mode()?;
@@ -49,8 +49,8 @@ impl<T: Theme> UI for TerminalUI<T> {
             self.stdout.flush()
         }
 
-        fn add_lap(&mut self) -> io::Result<()> {
-            self.lap_rows += 1;
+        fn add_split(&mut self) -> io::Result<()> {
+            self.split_counter += 1;
 
             io::Result::Ok(())
         }
@@ -58,7 +58,7 @@ impl<T: Theme> UI for TerminalUI<T> {
         fn pause_screen(&mut self) -> io::Result<()> {
             execute!(
                 self.stdout,
-                MoveTo(0, self.lap_rows + 3),
+                MoveTo(0, self.split_counter + 3),
                 Clear(ClearType::CurrentLine),
                 Print(">> paused")
             )?;
@@ -66,9 +66,9 @@ impl<T: Theme> UI for TerminalUI<T> {
             self.stdout.flush()
         }
 
-        fn print(&mut self, duration: &Duration, laps: &Vec<Duration>) -> io::Result<()> {
-            for (i, lap) in laps.iter().enumerate() {
-                let s = format!("> {}:\t{}\n", i + 1, self.theme.format(lap));
+        fn print(&mut self, duration: &Duration, splits: &Vec<Duration>) -> io::Result<()> {
+            for (i, split) in splits.iter().enumerate() {
+                let s = format!("> {}:\t{}\n", i + 1, self.theme.format(split));
 
                 execute!(
                     self.stdout,
@@ -79,10 +79,10 @@ impl<T: Theme> UI for TerminalUI<T> {
 
             execute!(
                 self.stdout,
-                cursor::MoveTo(0, self.lap_rows + 1),
+                cursor::MoveTo(0, self.split_counter + 1),
                 Clear(ClearType::CurrentLine),
                 Print(self.theme.format(&duration)),
-                MoveTo(0, self.lap_rows + 3),
+                MoveTo(0, self.split_counter + 3),
                 Clear(ClearType::CurrentLine),
                 Print(">> running")
             )?;

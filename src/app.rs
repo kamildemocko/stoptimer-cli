@@ -9,7 +9,7 @@ pub struct App<T: Theme> {
     start_time: Instant,
     paused_duration: Duration,
     paused_time: Instant,
-    laps: Vec<Duration>,
+    splits: Vec<Duration>,
     ui: TerminalUI<T>
 }
 
@@ -20,8 +20,7 @@ impl<T: Theme> App<T> {
             is_running: true,
             paused_duration: Duration::from_millis(0),
             paused_time: Instant::now(),
-            // laps: vec!(Duration::from_millis(40000), Duration::from_millis(320000)),
-            laps: vec!(),
+            splits: vec!(),
             ui: TerminalUI::new(theme),
         }
     }
@@ -32,12 +31,12 @@ impl<T: Theme> App<T> {
 
     pub fn print_one(&mut self) -> io::Result<()> {
         let wo_pause = self.start_time.elapsed() - self.paused_duration;
-        self.ui.print(&wo_pause, &self.laps)
+        self.ui.print(&wo_pause, &self.splits)
     }
 
-    pub fn lap(&mut self) -> io::Result<()> {
-        self.laps.push(self.start_time.elapsed() - self.paused_duration);
-        self.ui.add_lap()?;
+    pub fn split(&mut self) -> io::Result<()> {
+        self.splits.push(self.start_time.elapsed() - self.paused_duration);
+        self.ui.add_split()?;
         self.ui.init_screen()
     }
 

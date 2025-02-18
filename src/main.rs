@@ -29,7 +29,7 @@ fn main() -> io::Result<()> {
                         app.toggle_pause()?;
                     }
                     event::KeyCode::Char('s') => {
-                        app.lap()?;
+                        app.split()?;
                     }
                     _ => {}
                 }
