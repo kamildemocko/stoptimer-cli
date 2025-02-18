@@ -22,7 +22,7 @@ impl<T: Theme> TerminalUI<T> {
 
 
 impl<T: Theme> UI for TerminalUI<T> {
-        fn prepare_screen(&self) -> io::Result<()> {
+        fn init_screen(&self) -> io::Result<()> {
             let mut stdout = io::stdout();
 
             enable_raw_mode()?;
