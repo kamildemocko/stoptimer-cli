@@ -1,6 +1,7 @@
 # Stopwatch CLI
 
 A simple, terminal-based stopwatch written in Rust.
+Works in unix based systems for now.
 
 ## Features
 
