@@ -53,7 +53,6 @@ impl<T: Theme> App<T> {
             self.paused_time = Instant::now();
         } else {
             self.paused_duration += self.paused_time.elapsed();
-
         }
 
         self.is_running = !self.is_running;
