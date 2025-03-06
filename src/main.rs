@@ -8,14 +8,23 @@ use std::{thread, time::Duration};
 
 use crossterm::event::{self, Event};
 
-use args::parse_requested_theme;
+use args::ArgParser;
 use app::App;
 use themes::factory::ThemeFactory;
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+const NAME: &str = env!("CARGO_PKG_NAME");
 const TICK: Duration = Duration::from_millis(8);
 
+
 fn main() -> io::Result<()> {
-    let requested_theme = parse_requested_theme();
+    let argp = ArgParser::new();
+    if argp.version_requested() {
+        println!("{}: {}", NAME, VERSION);
+        std::process::exit(0);
+    }
+
+    let requested_theme = argp.parse_requested_theme();
     let theme = ThemeFactory::create(requested_theme);
 
     let mut app = App::new(theme);

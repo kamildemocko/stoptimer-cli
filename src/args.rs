@@ -5,21 +5,35 @@ use clap::Parser;
 use crate::themes::factory::ThemeType;
 
 #[derive(Parser)]
-pub struct Cli {
+struct Cli {
     #[arg(short, long, default_value="default")]
     theme: String,
     #[arg(short, long)]
     list_themes: bool,
+    #[arg(short, long)]
+    version: bool,
 }
 
-pub fn parse_requested_theme() -> ThemeType {
-    let args = Cli::parse();
+pub struct ArgParser{
+    cli: Cli,
+}
 
-    if args.list_themes {
-        let available = ThemeType::available_themes();
-        println!("Available themes: {}", available.join(", "));
-        process::exit(0)
+impl ArgParser {
+    pub fn new() -> Self {
+        ArgParser{ cli: Cli::parse() }
     }
 
-    ThemeType::from_str(&args.theme)
+    pub fn version_requested(&self) -> bool {
+        self.cli.version
+    }
+
+    pub fn parse_requested_theme(&self) -> ThemeType {
+        if self.cli.list_themes {
+            let available = ThemeType::available_themes();
+            println!("Available themes: {}", available.join(", "));
+            process::exit(0)
+        }
+
+        ThemeType::from_str(&self.cli.theme)
+    }
 }
